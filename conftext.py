@@ -1,6 +1,7 @@
 import os
 import sys
-import configparser
+from configparser import ConfigParser
+from invoke import task, Program, Collection
 
 CONFTEXT_FILENAME = '.conftext.ini'
 CONFTEXT_SECTION = 'conftext'
@@ -66,16 +67,16 @@ def ask_config_path():
         sys.exit('Invalid choice: %s' % choice)
 
 
-def read_config(config_file):
-    config = configparser.ConfigParser()
-    config.read(config_file)
-    return config
-
-
 def write_config(filepath, config):
     with open(filepath, 'w') as config_file_obj:
         config.write(config_file_obj)
     print("Wrote config to %s" % filepath)
+
+
+def read_config(config_file)->ConfigParser:
+    config = ConfigParser()
+    config.read(config_file)
+    return config
 
 
 def print_config(config):
@@ -86,7 +87,11 @@ def print_config(config):
 # Public API
 ###
 
-def get_config(**kwargs):
+class NoConftext(Exception):
+    pass
+
+
+def get_config(**kwargs)->ConfigParser:
     """
     Get config
     
@@ -94,16 +99,37 @@ def get_config(**kwargs):
     it will be ignored.
     """
     config_file = find_config_file()
+    
+    if not config_file and not kwargs:
+        raise NoConftext('No "%s" file found and no kwargs given.' % CONFTEXT_FILENAME)
+    
     if config_file:
         config = read_config(config_file)[CONFTEXT_SECTION]
-        for key, val in kwargs.items():
-            if key in config and val is not None:
-                config[key] = val
-        return config
     else:
-        raise FileNotFoundError(
-            'No "%s" file in search from "%s" to stop paths: %s, nor in default path: "%s"' % (
-                CONFTEXT_FILENAME,
-                os.getcwd(),
-                stop_paths,
-                default_config_path()))
+        config = dict()
+    
+    for key, val in kwargs.items():
+        if val is not None:
+            config[key] = val
+    
+    return config
+
+
+@task(default=True)
+def show(ctxt):
+    """
+    Show config context
+    """
+    config_file = find_config_file()
+    if not config_file:
+        config_file = ask_config_path()
+        config = create_initial_config()
+        write_config(config_file, config)
+    print_config(read_config(config_file))
+###
+# Invoke setup
+###
+
+namespace = Collection()
+namespace.add_task(show)
+program = Program(namespace=namespace)
