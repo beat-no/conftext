@@ -151,6 +151,24 @@ def get_config(**kwargs)->ConfigParser:
     return config
 
 
+def get_config_v2(**kwargs)->ConfigParser:
+    config_file = find_config_file()
+    
+    if not config_file and not kwargs:
+        raise NoConftext('No "%s" file found and no kwargs given.' % CONFTEXT_FILENAME)
+    
+    if config_file:
+        config = read_config(config_file)
+    else:
+        config = dict()
+    
+    for key, val in kwargs.items():
+        if val is not None:
+            config[key] = val
+    
+    return config
+
+
 @task(default=True)
 def show(ctxt, verbose=False):
     """
