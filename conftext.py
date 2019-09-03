@@ -1,10 +1,18 @@
 import os
 import sys
 from configparser import ConfigParser
+import pkg_resources
+from pydantic import BaseModel
 from invoke import task, Program, Collection
 
 CONFTEXT_FILENAME = '.conftext.ini'
 CONFTEXT_SECTION = 'conftext'
+
+
+class MultiTenant(BaseModel):
+    # NOTE: ConfigParser doesn't like `None`, so we use strings for now.
+    tenant: str = str(None)
+    environment: str = str(None)
 
 
 ###
@@ -73,14 +81,42 @@ def write_config(filepath, config):
     print("Wrote config to %s" % filepath)
 
 
-def read_config(config_file)->ConfigParser:
-    config = ConfigParser()
-    config.read(config_file)
+def read_config(config_filepath_or_string)->ConfigParser:
+    config = ConfigParser(default_section=CONFTEXT_SECTION)
+    if not config.read(config_filepath_or_string):
+        config.read_string(config_filepath_or_string)
     return config
 
 
 def print_config(config):
     print('[%s]' % '/'.join(config[CONFTEXT_SECTION].values()))
+
+
+def get_conftext_schemas():
+    return {ep.name: ep.load() for ep in pkg_resources.iter_entry_points(group='conftext')}
+
+
+def create_initial_config()->ConfigParser:
+    """
+    Create initial config
+    """
+    
+    # select from registered schamas in package entries
+    schemas = dict(enumerate(get_conftext_schemas().items(), start=1))
+    print("Schemas registered as entry points:")
+    for num, (name, schema) in schemas.items():
+        print(num, name, schema)
+    
+    in_val = input('select schema by number: ')
+    name, selected_schema = schemas[int(in_val)]
+    print("selected '%s': %s" % (name, selected_schema))
+    
+    print(dict(selected_schema()))
+    
+    # create and return selected config
+    schema = ConfigParser()
+    schema[CONFTEXT_SECTION] = dict(selected_schema())
+    return schema
 
 
 ###
@@ -116,7 +152,7 @@ def get_config(**kwargs)->ConfigParser:
 
 
 @task(default=True)
-def show(ctxt):
+def show(ctxt, verbose=False):
     """
     Show config context
     """
@@ -125,11 +161,33 @@ def show(ctxt):
         config_file = ask_config_path()
         config = create_initial_config()
         write_config(config_file, config)
+    if verbose:
+        print(config_file)
     print_config(read_config(config_file))
+
+
+@task
+def schemas(ctxt):
+    """
+    List all schemas
+    """
+    for key, val in get_conftext_schemas().items():
+        print(key, val.schema_json())
+
+
+@task
+def init(ctxt):
+    """
+    Initialize a conftext file
+    """
+    config = create_initial_config()
+    print(config)
 ###
 # Invoke setup
 ###
 
 namespace = Collection()
+namespace.add_task(init)
 namespace.add_task(show)
+namespace.add_task(schemas)
 program = Program(namespace=namespace)

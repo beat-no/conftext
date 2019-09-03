@@ -4,7 +4,10 @@ setup(
     name='conftext',
     version='0.0.1',
     
-    install_requires=['invoke'],
+    install_requires=[
+        "invoke",
+        "pydantic",
+    ],
     
     extras_require={
         'dev': [
@@ -15,9 +18,8 @@ setup(
     py_modules=['conftext'],
     
     entry_points={
-        'console_scripts': [
-            'conftext = conftext:program.run',
-        ]
+        "console_scripts": ["conftext = conftext:program.run"],
+        "conftext": ["default = conftext:MultiTenant"]
     },
     
     author='Øystein S. Haaland',
