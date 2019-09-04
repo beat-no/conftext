@@ -11,6 +11,7 @@ setup(
     
     extras_require={
         "dev": [
+            "twine",
             "pytest",
         ]
     },
