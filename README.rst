@@ -25,21 +25,23 @@ This small library intends to help bring things back to:
    $ some_task2()
    $ some_task3(param1)
 
-This is just an example. The tool is meant to be generic and used for other cases then what is
-described here.
+This is just an example. The tool is meant to be generic and is not nescessarily only made for this
+particular use case.
 
 Current operation
 -----------------
 Use `get_config` in code where context-aware config should be loaded. The conftext invoke task can
 then be used to switch the context config.
 
+Todo
+----
 1. could probably drop dependency on invoke
-2. the functions and globals in here should become a class
-3. add a enter task for the CLI tool that will enter the conf context
-4. when inside conf context, consider modifying the prompt to show vital context config
-5. add exit task as well
-6. add python prompt with config context as well as the initial bash based one
-7. include handling of virtualenv àla virtualenvwrapper? otherwise 4 could come in conflict
+2. the functions and globals in the module could be made into a class
+3. add a enter task for the CLI tool that will enter the conf context?
+   - when inside conf context, consider modifying the prompt to show vital context config
+   - add exit task as well
+4. add python prompt with config context as well?
+5. include handling of virtualenv àla virtualenvwrapper? otherwise 4 could come in conflict
 
 Future suggested usage pattern
 ------------------------------
