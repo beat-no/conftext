@@ -1,3 +1,5 @@
-conftext.egg-info
+.kdev4/
+__pycache__/
+conftext.egg-info/
 conftext.kdev4
-__pycache__
+
