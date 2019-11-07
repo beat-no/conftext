@@ -200,6 +200,8 @@ def init(ctxt):
     """
     config = create_initial_config()
     print(config)
+
+
 ###
 # Invoke setup
 ###
