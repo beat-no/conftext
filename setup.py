@@ -1,8 +1,8 @@
 from setuptools import setup
 
 setup(
-    name='conftext',
-    version='0.0.2',
+    name="conftext",
+    version="0.0.2",
     
     install_requires=[
         "invoke",
@@ -16,7 +16,7 @@ setup(
         ]
     },
     
-    py_modules=['conftext'],
+    packckages=["conftext"],
     
     entry_points={
         "console_scripts": ["conftext = conftext:program.run"],
