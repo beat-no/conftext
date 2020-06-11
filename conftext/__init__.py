@@ -30,7 +30,7 @@ def default_config_path():
 stop_paths = [os.path.sep, os.path.dirname(user_home())]
 
 
-def find_config_file():
+def find_conftext_file():
     """
     Find config files
     
@@ -134,7 +134,7 @@ def get_config(**kwargs)->ConfigParser:
     kwargs can be used to overwrite settings from config file. If the value of a kwarg is `None`,
     it will be ignored.
     """
-    config_file = find_config_file()
+    config_file = find_conftext_file()
     
     if not config_file and not kwargs:
         raise NoConftext('No "%s" file found and no kwargs given.' % CONFTEXT_FILENAME)
@@ -174,7 +174,7 @@ def show(ctxt, verbose=False):
     """
     Show config context
     """
-    config_file = find_config_file()
+    config_file = find_conftext_file()
     if not config_file:
         config_file = ask_config_path()
         config = create_initial_config()
