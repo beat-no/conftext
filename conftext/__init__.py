@@ -81,7 +81,7 @@ def write_config(filepath, config):
     print("Wrote config to %s" % filepath)
 
 
-def read_config(config_filepath_or_string)->ConfigParser:
+def read_config(config_filepath_or_string) -> ConfigParser:
     config = ConfigParser(default_section=CONFTEXT_SECTION)
     if not config.read(config_filepath_or_string):
         config.read_string(config_filepath_or_string)
@@ -96,7 +96,7 @@ def get_conftext_schemas():
     return {ep.name: ep.load() for ep in pkg_resources.iter_entry_points(group='conftext')}
 
 
-def create_initial_config()->ConfigParser:
+def create_initial_config() -> ConfigParser:
     """
     Create initial config
     """
@@ -127,7 +127,7 @@ class NoConftext(Exception):
     pass
 
 
-def get_config(**kwargs)->ConfigParser:
+def get_config(**kwargs) -> ConfigParser:
     """
     Get config
     
@@ -151,8 +151,8 @@ def get_config(**kwargs)->ConfigParser:
     return config
 
 
-def get_config_v2(**kwargs)->ConfigParser:
-    config_file = find_config_file()
+def get_config_v2(**kwargs) -> ConfigParser:
+    config_file = find_conftext_file()
     
     if not config_file and not kwargs:
         raise NoConftext('No "%s" file found and no kwargs given.' % CONFTEXT_FILENAME)
