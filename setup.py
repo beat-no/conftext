@@ -13,6 +13,7 @@ setup(
         "dev": [
             "twine",
             "pytest",
+            "pytest-regtest",
         ]
     },
     

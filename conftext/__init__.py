@@ -2,7 +2,12 @@ from configparser import ConfigParser
 from pydantic import BaseModel
 from invoke import task, Program, Collection
 from conftext import conftext
+from conftext import conf_ini
 
+
+###
+# Schema
+###
 
 class MultiTenant(BaseModel):
     # NOTE: ConfigParser doesn't like `None`, so we use strings for now.
@@ -59,6 +64,21 @@ def get_config_v2(**kwargs) -> ConfigParser:
     
     return config
 
+
+def get_ini_config(config_filepath, conftext=None, module_name=None):
+    """
+    Get config from ini file
+    
+    Can use module name to look for config file in corresponding path under `~/.config`. Only use
+    the conftext machinery if its nexessary to select from multiple sections in config file.
+    """
+    config_file = conf_ini.read_config(config_filepath)
+    return conf_ini.get_config_section(config_file, conftext, module_name)
+
+
+###
+# Tasks
+###
 
 @task(default=True)
 def show(ctxt, verbose=False):
