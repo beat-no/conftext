@@ -1,3 +1,5 @@
+__version__ = "0.0.2"
+
 from configparser import ConfigParser
 from pydantic import BaseModel
 from invoke import task, Program, Collection
