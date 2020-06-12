@@ -1,11 +1,21 @@
-conftext - a helper for managing configuration contexts
+========
+conftext
+========
+This package contains a couple of mudules:
+
+* conftext - a helper for managing configuration contexts.
+* conf_ini - unified configuration handling for ini files.
+
+
+conftext
+========
 
 Motivation
 ----------
 Imagine handling multi-tenant services, that each require certain config contexts to be specified
-for using them (think db connection information for instance). The parameters of these config
-options are the same, but their values differ. You are creating CLI tools for working with these
-services and find yourself doing:
+for using them (think db connection information for instance). A "configuration matrix" if you like.
+The parameters of these config options are the same, but their values differ. You are creating CLI
+tools for working with these services and find yourself doing:
 
 .. code-block:: shell
 
@@ -28,31 +38,22 @@ This small library intends to help bring things back to:
 This is just an example. The tool is meant to be generic and is not nescessarily only made for this
 particular use case.
 
-Current operation
------------------
+Operation
+---------
+This tool works by providing a way to persist configuration coordinates that can be used to look up
+the appropriate configuration in the "configuarion matrix". The configuration coordinates are stored
+in a file at well-known location (look at current dir, then traverse upwards in file hierarchy until
+`/` or `~/.config/conftext.ini`).
+
+A command-line tool, also called conftext, can be used to show and manipulate the conftext file.
+
+Usage
+-----
 Use `get_config` in code where context-aware config should be loaded. The conftext invoke task can
 then be used to switch the context config.
 
-Todo
-----
-1. could probably drop dependency on invoke
-2. the functions and globals in the module could be made into a class
-3. add a enter task for the CLI tool that will enter the conf context?
-   - when inside conf context, consider modifying the prompt to show vital context config
-   - add exit task as well
-4. add python prompt with config context as well?
-5. include handling of virtualenv àla virtualenvwrapper? otherwise 4 could come in conflict
+Example in code::
 
-Future suggested usage pattern
-------------------------------
-1. prepare a dict with a set of default config options that can be passed to 
-   `create_initial_config`.
-2. initialize the `Conftext` class with the section that should be looked for and the default
-   config dict.
-3. call get_config.
-
-Example in code
----------------
 .. code-block:: python
 
    defaults = dict(
@@ -61,10 +62,30 @@ Example in code
    
    config = Conftext(section='rytm-dbkit', default_config=defaults)
 
-Command-line usage
-------------------
+Command-line usage::
+
 .. code-block:: shell
 
    $ conftext show
    $ conftext set --service <someservice>
    $ conftext set --service <someservice> --context <somecontext>
+
+Ideas
+-----
+* add a enter task for the CLI tool that will enter the conf context?
+   - when inside conf context, consider modifying the prompt to show vital context config
+   - add exit task as well
+* add python prompt with config context as well?
+
+
+conf_ini
+========
+
+Provides unified configuarion for ini files.
+
+Currently, this means that the configuration for a given package/module is expected to be found in::
+
+    ~/.config/<package>/<module>.ini
+
+and that the file is expected to in a `.ini` format that can be parsed by the configparser of the
+python standard library.
