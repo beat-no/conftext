@@ -52,7 +52,7 @@ Usage
 Use `get_config` in code where context-aware config should be loaded. The conftext invoke task can
 then be used to switch the context config.
 
-Example in code::
+Example in code:
 
 .. code-block:: python
 
@@ -62,7 +62,7 @@ Example in code::
    
    config = Conftext(section='rytm-dbkit', default_config=defaults)
 
-Command-line usage::
+Command-line usage:
 
 .. code-block:: shell
 
