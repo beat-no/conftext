@@ -6,20 +6,20 @@ from conftext import conf_ini
 CONFTEXT_ONLY_GLOBAL = conftext.read_from_file("""
 [conftext]
 environment = development
-service = fabel
+service = dummy
 """)
 
 CONFTEXT_WITH_MODULE_SECTION = conftext.read_from_file("""
 [conftext]
 environment = development
-service = fabel
+service = dummy
 
-[rytm.clients.dummy]
+[package.module]
 environment = development
 """)
 
-FILEPATH_DEFAULT_SECTION = "tests/config/rytm/dummy/default_section.ini"
-FILEPATH_MULTI_SECTION = "tests/config/rytm/dummy/multi_section.ini"
+FILEPATH_DEFAULT_SECTION = "tests/config/package/module/default_section.ini"
+FILEPATH_MULTI_SECTION = "tests/config/package/module/multi_section.ini"
 
 
 def test_get_ini_config_ok(regtest):
@@ -35,15 +35,15 @@ def test_get_config_section(regtest):
     
     config = conf_ini.read_config(FILEPATH_DEFAULT_SECTION)
     print(conf_ini.get_config_section(
-        config, CONFTEXT_WITH_MODULE_SECTION, "rytm.clients.dummy"), file=regtest)
+        config, CONFTEXT_WITH_MODULE_SECTION, "package.module"), file=regtest)
     print(conf_ini.get_config_section(
-        config, CONFTEXT_ONLY_GLOBAL, "rytm.clients.dummy"), file=regtest)
+        config, CONFTEXT_ONLY_GLOBAL, "package.module"), file=regtest)
     
     config = conf_ini.read_config(FILEPATH_MULTI_SECTION)
     print(conf_ini.get_config_section(
-        config, CONFTEXT_WITH_MODULE_SECTION, "rytm.clients.dummy"), file=regtest)
+        config, CONFTEXT_WITH_MODULE_SECTION, "package.module"), file=regtest)
     print(conf_ini.get_config_section(
-        config, CONFTEXT_ONLY_GLOBAL, "rytm.clients.dummy"), file=regtest)
+        config, CONFTEXT_ONLY_GLOBAL, "package.module"), file=regtest)
 
 
 def test_get_config(regtest):
@@ -51,5 +51,5 @@ def test_get_config(regtest):
     print(get_ini_config(
         FILEPATH_MULTI_SECTION,
         CONFTEXT_WITH_MODULE_SECTION,
-        module_name="rytm.clients.dummy"
+        module_name="package.module"
     ), file=regtest)

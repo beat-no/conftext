@@ -57,10 +57,10 @@ Example in code:
 .. code-block:: python
 
    defaults = dict(
-       service='beat',
-       context='local)
+       service='dummy',
+       context='local')
    
-   config = Conftext(section='rytm-dbkit', default_config=defaults)
+   config = Conftext(section='package.module', default_config=defaults)
 
 Command-line usage:
 
