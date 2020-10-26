@@ -1,4 +1,4 @@
-__version__ = "0.0.6"
+__version__ = "0.0.7"
 
 from configparser import ConfigParser
 from pydantic import BaseModel
