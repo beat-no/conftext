@@ -10,7 +10,7 @@ def read_config(filepath):
     raise FileNotFoundError(filepath)
 
 
-def get_config_section(config_file, conftext, moduel_name):
+def get_config_section(config_file, conftext, module_name):
     """
     Get config section
     
@@ -20,11 +20,25 @@ def get_config_section(config_file, conftext, moduel_name):
     section_name = None
     
     if config_file.sections():
-        if conftext:
-            if moduel_name in conftext:
-                section_name = conftext[moduel_name].get("environment")
-            else:
-                section_name = conftext["conftext"].get("environment")
+        
+        # Select default or named section in conftext config. Named ones will inherit values form
+        # defaults that has not been set.
+        if conftext.sections() and module_name in conftext:
+            conftext_section = conftext[module_name]
+        elif conftext.defaults():
+            conftext_section = conftext.defaults()
+        else:
+            print("WARNING! No defaults and no named sections in conftext config.")
+        
+        # We select section based on two hard-coded dimmensions for now; service and context. This
+        # should be based on the config schema.
+        if "service" in conftext_section and conftext_section["service"] in config_file:
+            section_name = conftext_section["service"]
+        elif "context" in conftext_section and conftext_section["context"] in config_file:
+            section_name = conftext_section["context"]
+        else:
+            print(f"WARNING: No match for {conftext_section} in {config_file}")
+    
     elif config_file.defaults():
         section_name = configparser.DEFAULTSECT
     

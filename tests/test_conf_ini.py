@@ -5,17 +5,17 @@ from conftext import conf_ini
 
 CONFTEXT_ONLY_GLOBAL = conftext.read_from_file("""
 [conftext]
-environment = development
+context = development
 service = dummy
 """)
 
 CONFTEXT_WITH_MODULE_SECTION = conftext.read_from_file("""
 [conftext]
-environment = development
+context = development
 service = dummy
 
 [package.module]
-environment = development
+context = development
 """)
 
 FILEPATH_DEFAULT_SECTION = "tests/config/package/module/default_section.ini"

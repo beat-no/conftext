@@ -3,7 +3,7 @@ import conftext
 
 
 def test_get_conftext_schemas():
-    print(conftext.conftext.get_schemas())
+    conftext.conftext.get_schemas()
 
 
 def test_get_config():

@@ -11,8 +11,14 @@ from conftext import conf_ini
 # Schema
 ###
 
-class MultiTenant(BaseModel):
-    # NOTE: ConfigParser doesn't like `None`, so we use strings for now.
+# NOTE: ConfigParser doesn't like `None`, so we use strings for now.
+
+class MultiTenantV1(BaseModel):
+    service: str = str(None)
+    context: str = str(None)
+
+
+class MultiTenantV2(BaseModel):
     tenant: str = str(None)
     environment: str = str(None)
 
