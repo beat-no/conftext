@@ -68,7 +68,7 @@ def get_config_v2(**kwargs) -> ConfigParser:
     
     for key, val in kwargs.items():
         if val is not None:
-            config[key] = val
+            config[config.default_section][key] = val
     
     return config
 
