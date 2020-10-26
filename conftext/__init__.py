@@ -61,10 +61,7 @@ def get_config_v2(**kwargs) -> ConfigParser:
     if not config_file and not kwargs:
         raise NoConftext('No "%s" file found and no kwargs given.' % conftext.CONFTEXT_FILENAME)
     
-    if config_file:
-        config = conftext.read_from_file(config_file)
-    else:
-        config = dict()
+    config = conftext.read_from_file(config_file)
     
     for key, val in kwargs.items():
         if val is not None:
