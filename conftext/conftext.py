@@ -27,7 +27,7 @@ def find_file():
     
     Then it will look for `~/.config/conftext.ini`
     
-    Returns `False` if no files found.
+    Returns `None` if no files found.
     """
     current_path = os.getcwd()
     
@@ -44,8 +44,8 @@ def find_file():
     if os.path.isfile(candidate_path):
         return candidate_path
     
-    # Finally return false if no conf file found.
-    return False
+    # Finally return None if no conf file found.
+    return None
 
 
 def ask_path():
