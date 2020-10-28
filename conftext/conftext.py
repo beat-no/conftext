@@ -69,10 +69,11 @@ def write_to_file(filepath, config):
     print("Wrote config to %s" % filepath)
 
 
-def read_from_file(config_filepath_or_string) -> ConfigParser:
+def read_from_file(config_filepath_or_string: str) -> ConfigParser:
     config = ConfigParser(default_section=CONFTEXT_SECTION)
-    if not config.read(config_filepath_or_string):
-        config.read_string(config_filepath_or_string)
+    if config_filepath_or_string:
+        if not config.read(config_filepath_or_string):
+            config.read_string(config_filepath_or_string)
     return config
 
 

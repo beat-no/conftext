@@ -12,3 +12,7 @@ def test_get_config():
     
     with pytest.raises(conftext.NoConftext):
         conftext.get_config()
+
+
+def test_read_from_file():
+    assert conftext.conftext.read_from_file(False)
