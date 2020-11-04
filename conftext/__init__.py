@@ -77,8 +77,18 @@ def get_ini_config(config_filepath, conftext=None, module_name=None):
     Can use module name to look for config file in corresponding path under `~/.config`. Only use
     the conftext machinery if its nexessary to select from multiple sections in config file.
     """
+    conftext_section = None
+    
+    # Select default or named section in conftext config. Named sections will inherit values from
+    # defaults for options that have not been set.
+    if conftext:
+        if conftext.sections() and module_name in conftext:
+            conftext_section = conftext[module_name]
+        else:
+            conftext_section = conftext.defaults()
+    
     config_file = conf_ini.read_config(config_filepath)
-    return conf_ini.get_config_section(config_file, conftext, module_name)
+    return conf_ini.get_config_section(config_file, conftext_section)
 
 
 ###

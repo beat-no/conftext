@@ -35,15 +35,15 @@ def test_get_config_section(regtest):
     
     config = conf_ini.read_config(FILEPATH_DEFAULT_SECTION)
     print(conf_ini.get_config_section(
-        config, CONFTEXT_WITH_MODULE_SECTION, "package.module"), file=regtest)
+        config, CONFTEXT_WITH_MODULE_SECTION["package.module"]), file=regtest)
     print(conf_ini.get_config_section(
-        config, CONFTEXT_ONLY_GLOBAL, "package.module"), file=regtest)
+        config, CONFTEXT_ONLY_GLOBAL.defaults()), file=regtest)
     
     config = conf_ini.read_config(FILEPATH_MULTI_SECTION)
     print(conf_ini.get_config_section(
-        config, CONFTEXT_WITH_MODULE_SECTION, "package.module"), file=regtest)
+        config, CONFTEXT_WITH_MODULE_SECTION["package.module"]), file=regtest)
     print(conf_ini.get_config_section(
-        config, CONFTEXT_ONLY_GLOBAL, "package.module"), file=regtest)
+        config, CONFTEXT_ONLY_GLOBAL.defaults()), file=regtest)
 
 
 def test_get_config(regtest):
