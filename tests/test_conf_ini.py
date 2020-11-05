@@ -47,9 +47,7 @@ def test_get_config_section(regtest):
 
 
 def test_get_config(regtest):
-    
     print(get_ini_config(
         FILEPATH_MULTI_SECTION,
-        CONFTEXT_WITH_MODULE_SECTION,
-        module_name="package.module"
+        CONFTEXT_WITH_MODULE_SECTION["package.module"]
     ), file=regtest)

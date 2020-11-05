@@ -31,6 +31,17 @@ class NoConftext(Exception):
     pass
 
 
+def get_section(conftext, section_name=None):
+    """
+    Select default or named section in conftext config. Named sections will inherit values from
+    defaults for options that have not been set.
+    """
+    if section_name and section_name in conftext:
+        return conftext[section_name]
+    else:
+        return conftext.defaults()
+
+
 def get_config(**kwargs) -> ConfigParser:
     """
     Get config
@@ -44,7 +55,7 @@ def get_config(**kwargs) -> ConfigParser:
         raise NoConftext('No "%s" file found and no kwargs given.' % conftext.CONFTEXT_FILENAME)
     
     if config_file:
-        config = conftext.read_from_file(config_file)[conftext.CONFTEXT_SECTION]
+        config = get_section(conftext.read_from_file(config_file), conftext.CONFTEXT_SECTION)
     else:
         config = dict()
     
@@ -70,23 +81,13 @@ def get_config_v2(**kwargs) -> ConfigParser:
     return config
 
 
-def get_ini_config(config_filepath, conftext=None, module_name=None):
+def get_ini_config(config_filepath, conftext_section=None):
     """
     Get config from ini file
     
     Can use module name to look for config file in corresponding path under `~/.config`. Only use
     the conftext machinery if its nexessary to select from multiple sections in config file.
     """
-    conftext_section = None
-    
-    # Select default or named section in conftext config. Named sections will inherit values from
-    # defaults for options that have not been set.
-    if conftext:
-        if conftext.sections() and module_name in conftext:
-            conftext_section = conftext[module_name]
-        else:
-            conftext_section = conftext.defaults()
-    
     config_file = conf_ini.read_config(config_filepath)
     return conf_ini.get_config_section(config_file, conftext_section)
 
